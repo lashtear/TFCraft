@@ -85,12 +85,12 @@ public class EntityBear extends EntityTameable implements ICausesDamage, IAnimal
 	public EntityBear (World par1World)
 	{
 		super (par1World);
-		setSize (1.2F, 1.2F);
+		setSize (2.4F, 2.4F);
 		moveSpeed = 0.4F;
 		getNavigator ().setAvoidsWater (true);
 		tasks.addTask (1, new EntityAISwimming (this));
 		sizeMod = (float) Math.sqrt((rand.nextInt(rand.nextInt((DEGREE_OF_DIVERSION + 1) * 10) + 1) * (rand.nextBoolean() ? 1 : -1) * 0.01f + 1F) *
-										(1.0F - DIMORPHISM * sex));
+										(1.0F - DIMORPHISM * sex)) * 2f;
 		strengthMod = (float) Math.sqrt((rand.nextInt(rand.nextInt(DEGREE_OF_DIVERSION * 10) + 1) * (rand.nextBoolean() ? 1 : -1) * 0.01f + sizeMod));
 		aggressionMod = (float) Math.sqrt((rand.nextInt(rand.nextInt(DEGREE_OF_DIVERSION * 10) + 1) * (rand.nextBoolean() ? 1 : -1) * 0.01f + 1));
 		obedienceMod = (float) Math.sqrt((rand.nextInt(rand.nextInt(DEGREE_OF_DIVERSION * 10) + 1) * (rand.nextBoolean() ? 1 : -1) * 0.01f +
@@ -126,7 +126,7 @@ public class EntityBear extends EntityTameable implements ICausesDamage, IAnimal
 		}
 		else
 			isPeacefulAI = true;
-		//targetTasks.addTask(2, new EntityAIPanic(this,moveSpeed*1.5F));
+		targetTasks.addTask(2, new EntityAIPanic(this,moveSpeed*1.5F));
 
 		pregnancyRequiredTime = (int) (TFCOptions.animalTimeMultiplier * GESTATION_PERIOD * TFC_Time.ticksInMonth);
 
@@ -528,7 +528,7 @@ public class EntityBear extends EntityTameable implements ICausesDamage, IAnimal
 			if(familiarizedToday && familiarity < 100){
 				lastFamiliarityUpdate = totalDays;
 				familiarizedToday = false;
-				float familiarityChange = 3 * obedienceMod / aggressionMod; //Changed from 6 to 3 so bears are harder to tame by default. -Kitty
+				float familiarityChange = 6 * obedienceMod / aggressionMod; //Changed from 6 to 3 so bears are harder to tame by default. -Kitty
 				if (this.isAdult() && familiarity <= FAMILIARITY_CAP)
 				{
 					familiarity += familiarityChange;

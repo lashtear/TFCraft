@@ -35,12 +35,12 @@ public class WorldGenAcaciaKoaTrees extends WorldGenerator
 	/**
 	 * Currently always 1, can be set to 2 in the class constructor to generate a double-sized tree trunk for big trees.
 	 */
-	//private static final int trunkSize = 1;
+	private static final int trunkSize = 2;
 
 	/**
 	 * Sets the limit of the random value used to initialize the height limit.
 	 */
-	private int heightLimitLimit = 24;
+	private int heightLimitLimit = 36;
 
 	/**
 	 * Sets the distance limit for how far away the generator will populate leaves from the base leaf node.
@@ -280,18 +280,18 @@ public class WorldGenAcaciaKoaTrees extends WorldGenerator
 		int[] var6 = new int[] {var1, var3, var4};
 		this.placeBlockLine(var5, var6, TFCBlocks.logNatural2);
 
-		/*if (WorldGenAcaciaKoaTrees.trunkSize == 2)
+		if (WorldGenAcaciaKoaTrees.trunkSize == 2)
 		{
 			++var5[0];
 			++var6[0];
-			this.placeBlockLine(var5, var6, TFCBlocks.LogNatural2);
+			this.placeBlockLine(var5, var6, TFCBlocks.logNatural2);
 			++var5[2];
 			++var6[2];
-			this.placeBlockLine(var5, var6, TFCBlocks.LogNatural2);
+			this.placeBlockLine(var5, var6, TFCBlocks.logNatural2);
 			var5[0] += -1;
 			var6[0] += -1;
-			this.placeBlockLine(var5, var6, TFCBlocks.LogNatural2);
-		}*/
+			this.placeBlockLine(var5, var6, TFCBlocks.logNatural2);
+		}
 	}
 
 	private void genTreeLayer(int par1, int par2, int par3, float par4, byte par5, Block par6)

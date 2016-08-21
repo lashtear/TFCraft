@@ -93,7 +93,7 @@ public class BlockHotWater extends BlockCustomLiquid
 			if(world.rand.nextInt(25) == 0 && e.getHealth() < e.getMaxHealth())
 			{
 				float diff = e.getMaxHealth() - e.getHealth();
-				e.heal(Math.max(diff * 0.001f, 0.0001f));
+				e.heal(Math.max(diff * 0.01f, 0.01f));
 			}
 		}
 	}

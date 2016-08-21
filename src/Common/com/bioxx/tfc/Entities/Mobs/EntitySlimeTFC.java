@@ -7,6 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.bioxx.tfc.Core.TFC_MobData;
+import com.bioxx.tfc.api.Constant.Global;
 
 public class EntitySlimeTFC extends EntitySlime
 {
@@ -26,6 +27,15 @@ public class EntitySlimeTFC extends EntitySlime
 	protected EntitySlimeTFC createInstance()
 	{
 		return new EntitySlimeTFC(this.worldObj);
+	}
+
+	/**
+	 * Checks if the entity's current position is a valid location to spawn this entity.
+	 */
+	@Override
+	public boolean getCanSpawnHere()
+	{
+		return this.posY <= Global.SEALEVEL && this.worldObj.checkNoEntityCollision(this.boundingBox);
 	}
 
 	/**

@@ -107,7 +107,7 @@ public class BlockWaterPlant extends BlockSand implements ITileEntityProvider
 			{
 				dropBlockAsItem(world, x, y, z, getSeaWeed(world.rand));
 				doBeforeFall(world, x, y, z);
-				return true;
+				return false;
 			}
 		}
 		return false;

@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -204,11 +205,59 @@ public class TFC_CoreRender
 
 	public static boolean renderSnow(Block block, int i, int j, int k, RenderBlocks renderblocks)
 	{
-		int meta = renderblocks.blockAccess.getBlockMetadata(i, j, k);
-		float drift = 0.04F + (meta * 0.06F);
-		renderblocks.setRenderBounds(0.0F, 0.0F, 0F, 1.0F, drift, 1.0F);
-		renderblocks.renderStandardBlock(block, i, j, k);
+		int meta = renderblocks.blockAccess.getBlockMetadata (i,j,k) & 7;
+		Material aboveM = renderblocks.blockAccess.getBlock (i,j+1,k).getMaterial();
+
+		if (meta == 7
+			&& renderblocks.blockAccess.getBlock (i,j+1,k).getMaterial()
+			== Material.snow) {
+			renderblocks.setRenderBounds (0f,0f,0f,1f,1f,1f);
+			renderblocks.renderStandardBlock (block,i,j,k);
+			return true;
+		}
+
+		float localH = neighborSnowHeight (renderblocks, i, j, k );
+		float northH = neighborSnowHeight (renderblocks, i, j, k+1 );
+		float southH = neighborSnowHeight (renderblocks, i, j, k-1 );
+		float eastH = neighborSnowHeight (renderblocks, i+1, j, k );
+		float westH = neighborSnowHeight (renderblocks, i-1, j, k );
+		float neH = (northH + eastH + localH*2f) / 3f;
+		float nwH = (northH + westH + localH*2f) / 3f;
+		float seH = (southH + eastH + localH*2f) / 3f;
+		float swH = (southH + westH + localH*2f) / 3f;
+		final float epsilon = 1f/16f;
+		if (swH > epsilon) {
+			renderblocks.setRenderBounds (0f, 0f, 0f, 0.5f, swH, 0.5f);
+			renderblocks.renderStandardBlock(block, i, j, k);
+		}
+		if (seH > epsilon) {
+			renderblocks.setRenderBounds (0.5f, 0f, 0f, 1f, seH, 0.5f);
+			renderblocks.renderStandardBlock(block, i, j, k);
+		}
+		if (nwH > epsilon) {
+			renderblocks.setRenderBounds (0f, 0f, 0.5f, 0.5f, nwH, 1f);
+			renderblocks.renderStandardBlock(block, i, j, k);
+		}
+		if (neH > epsilon) {
+			renderblocks.setRenderBounds (0.5f, 0f, 0.5f, 1f, neH, 1f);
+			renderblocks.renderStandardBlock(block, i, j, k);
+		}
 		return true;
+	}
+
+	private static float neighborSnowHeight (RenderBlocks rb, int x, int y, int z)
+	{
+		Block b = rb.blockAccess.getBlock (x, y, z);
+		if (b == Blocks.air) {
+			return 0f;
+		} else if (b == TFCBlocks.snow) {
+			int bmeta = rb.blockAccess.getBlockMetadata (x,y,z);
+			return ((bmeta&7)+1)/8f;
+		} else if (b.isOpaqueCube()) {
+			return 1f;
+		} else {
+			return 1f/8f;
+		}
 	}
 
 	public static boolean renderWoodTrunk(Block block, int i, int j, int k, RenderBlocks renderblocks)

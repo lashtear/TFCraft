@@ -20,4 +20,10 @@ public class EntityBlazeTFC extends EntityBlaze
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(TFC_MobData.BLAZE_DAMAGE);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(TFC_MobData.BLAZE_HEALTH);//MaxHealth
 	}
+
+	@Override
+	public boolean getCanSpawnHere()
+	{
+		return this.posY <= 72 && this.worldObj.checkNoEntityCollision(this.boundingBox);
+	}
 }

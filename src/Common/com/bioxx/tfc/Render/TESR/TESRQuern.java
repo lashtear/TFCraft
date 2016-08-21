@@ -71,7 +71,7 @@ public class TESRQuern extends TESRBase implements ISimpleBlockRenderingHandler
 
 	private void renderRoundTop(Tessellator t, int pos, Random rand, double angle, Boolean renderSides)
 	{
-		int sides = 4; // how many sides should the quern stone have
+		int sides = 8; // how many sides should the quern stone have
 		double speed = pos * 4; // * 4 will make 2 turns, * 1 will make 1 turn, also look at TEQuern
 		double i = 0.625; // where should top rendering start
 		double j = i + 0.2; // thickness of the quern stone

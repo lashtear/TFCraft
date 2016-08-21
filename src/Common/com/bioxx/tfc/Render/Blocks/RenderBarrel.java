@@ -15,8 +15,9 @@ import com.bioxx.tfc.api.TFCBlocks;
 
 public class RenderBarrel implements ISimpleBlockRenderingHandler
 {
-	private static final float MIN = 0.1F;
-	private static final float MAX = 0.9F;
+	private static final float MIN = 1f/16f;
+	private static final float MAX = 1-MIN;
+	private static final float THICK = MIN;
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
@@ -40,12 +41,12 @@ public class RenderBarrel implements ISimpleBlockRenderingHandler
 		{
 			if(te.getSealed())
 			{
-				renderer.setRenderBounds(MIN+0.05F, MIN, MIN+0.05F, MAX-0.05F, 0.95F, MAX-0.05F);
+				renderer.setRenderBounds(MIN+THICK, MIN, MIN+THICK, MAX-THICK, MAX, MAX-THICK);
 				renderer.renderStandardBlock(lidBlock, x, y, z);
 			}
 			else
 			{
-				renderer.setRenderBounds(MIN+0.05F, MIN, MIN+0.05F, MAX-0.05F, MIN+0.05F, MAX-0.05F);
+				renderer.setRenderBounds(MIN+THICK, MIN, MIN+THICK, MAX-THICK, MIN+THICK, MAX-THICK);
 				renderer.renderStandardBlock(lidBlock, x, y, z);
 
 				if(te.fluid != null && renderer.overrideBlockTexture == null)
@@ -55,26 +56,26 @@ public class RenderBarrel implements ISimpleBlockRenderingHandler
 					float f1 = (color >> 8 & 255) / 255.0F;
 					float f2 = (color & 255) / 255.0F;
 					float h = 0.75f*(te.fluid.amount/10000f);
-					renderer.setRenderBounds(MIN+0.05F, MIN+0.05, MIN+0.05F, MAX-0.05F, MIN+0.05f+h, MAX-0.05F);
+					renderer.setRenderBounds(MIN+THICK, MIN+THICK, MIN+THICK, MAX-THICK, MIN+THICK+h, MAX-THICK);
 					IIcon still = te.fluid.getFluid().getStillIcon();
 					renderer.setOverrideBlockTexture(still);
 					renderer.renderStandardBlockWithColorMultiplier(lidBlock, x, y, z, f, f1, f2);
 					renderer.clearOverrideBlockTexture();
 				}
 			}
-			renderer.setRenderBounds(MIN, 0F, MIN+0.05F, MIN+0.05F, 1F, MAX-0.05F);
+			renderer.setRenderBounds(MIN, 0F, MIN+THICK, MIN+THICK, 1F, MAX-THICK);
 			rotate(renderer, 1);
 			renderer.renderStandardBlock(planksBlock, x, y, z);
 
-			renderer.setRenderBounds(MAX-0.05F, 0F, MIN+0.05F, MAX, 1F, MAX-0.05F);
+			renderer.setRenderBounds(MAX-THICK, 0F, MIN+THICK, MAX, 1F, MAX-THICK);
 			rotate(renderer, 1);
 			renderer.renderStandardBlock(planksBlock, x, y, z);
 
-			renderer.setRenderBounds(MIN, 0F, MIN, MAX, 1F, MIN+0.05F);
+			renderer.setRenderBounds(MIN, 0F, MIN, MAX, 1F, MIN+THICK);
 			rotate(renderer, 1);
 			renderer.renderStandardBlock(planksBlock, x, y, z);
 
-			renderer.setRenderBounds(MIN, 0F, MAX-0.05F, MAX, 1F, MAX);
+			renderer.setRenderBounds(MIN, 0F, MAX-THICK, MAX, 1F, MAX);
 			rotate(renderer, 1);
 			renderer.renderStandardBlock(planksBlock, x, y, z);
 
@@ -86,12 +87,12 @@ public class RenderBarrel implements ISimpleBlockRenderingHandler
 		{
 			if((te.rotation & 3) == 0)
 			{
-				renderer.setRenderBounds(MIN, MIN, MIN+0.05F, 0.95F, MIN+0.05F, MAX-0.05F);
+				renderer.setRenderBounds(MIN, MIN, MIN+THICK, MAX, MIN+THICK, MAX-THICK);
 				renderer.renderStandardBlock(lidBlock, x, y, z);
 			}
 			if((te.rotation & 3) == 1)
 			{
-				renderer.setRenderBounds(MIN+0.05F, MIN, MIN,MAX-0.05F, MIN+0.05F, 0.95F);
+				renderer.setRenderBounds(MIN+THICK, MIN, MIN,MAX-THICK, MIN+THICK, MAX);
 				renderer.renderStandardBlock(lidBlock, x, y, z);
 			}
 		}
@@ -124,29 +125,29 @@ public class RenderBarrel implements ISimpleBlockRenderingHandler
 			lidBlock = TFCBlocks.woodSupportH2;
 		}
 
-		renderer.setRenderBounds(MIN+0.05F, MIN, MIN+0.05F, MAX-0.05F, 0.95F, MAX-0.05F);
+		renderer.setRenderBounds(MIN+THICK, MIN, MIN+THICK, MAX-THICK, MAX, MAX-THICK);
 		rotate(renderer, 1);
 		renderInvBlock(lidBlock, meta, renderer);
 
-		renderer.setRenderBounds(MIN, 0F, MIN+0.05F, MIN+0.05F, 1F, MAX-0.05F);
+		renderer.setRenderBounds(MIN, 0F, MIN+THICK, MIN+THICK, 1F, MAX-THICK);
 		rotate(renderer, 1);
 		renderInvBlock(block, meta, renderer);
 		rotate(renderer, 0);
 		renderInvBlockHoop(block, meta, renderer);
 
-		renderer.setRenderBounds(MAX-0.05F, 0F, MIN+0.05F, MAX, 1F, MAX-0.05F);
+		renderer.setRenderBounds(MAX-THICK, 0F, MIN+THICK, MAX, 1F, MAX-THICK);
 		rotate(renderer, 1);
 		renderInvBlock(block, meta, renderer);
 		rotate(renderer, 0);
 		renderInvBlockHoop(block, meta, renderer);
 
-		renderer.setRenderBounds(MIN, 0F, MIN, MAX, 1F, MIN+0.05F);
+		renderer.setRenderBounds(MIN, 0F, MIN, MAX, 1F, MIN+THICK);
 		rotate(renderer, 1);
 		renderInvBlock(block, meta, renderer);
 		rotate(renderer, 0);
 		renderInvBlockHoop(block, meta, renderer);
 
-		renderer.setRenderBounds(MIN, 0F, MAX-0.05F, MAX, 1F, MAX);
+		renderer.setRenderBounds(MIN, 0F, MAX-THICK, MAX, 1F, MAX);
 		rotate(renderer, 1);
 		renderInvBlock(block, meta, renderer);
 		rotate(renderer, 0);

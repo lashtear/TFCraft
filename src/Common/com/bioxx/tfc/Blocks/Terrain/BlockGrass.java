@@ -25,6 +25,7 @@ import com.bioxx.tfc.Reference;
 import com.bioxx.tfc.TerraFirmaCraft;
 import com.bioxx.tfc.Blocks.BlockTerra;
 import com.bioxx.tfc.Core.*;
+import com.bioxx.tfc.WorldGen.Generators.WorldGenBerryBush;
 import com.bioxx.tfc.WorldGen.Generators.WorldGenSaplings;
 import com.bioxx.tfc.api.TFCBlocks;
 import com.bioxx.tfc.api.TFCOptions;
@@ -222,6 +223,8 @@ public class BlockGrass extends BlockTerra
 						world.setBlock(i, j + 1, k, TFCBlocks.tallGrass, (world.rand.nextInt(30) == 0 ? 1 : 0), 0x2); // 1/30 chance to spawn fern
 					else if (rand.nextInt(15000) == 0 && temp > 20)
 						new WorldGenSaplings().generate(world, rand, i, j, k);
+					else if (rand.nextInt(15000) == 0 && temp > 20)
+						new WorldGenBerryBush().generate(world, rand, i, j, k);
 				}
 
 				boolean nearWater = false;

@@ -350,6 +350,7 @@ public class TFCBiome extends BiomeGenBase
 		if(biomeList[id] == null)
 		{
 			TerraFirmaCraft.LOG.warn("Biome ID is null: " + id);
+
 		}
 		if (id >= 0 && id <= biomeList.length && biomeList[id] != null)
 		{

@@ -18,11 +18,19 @@ import com.bioxx.tfc.api.TFCBlocks;
 
 public class WorldGenBerryBush extends WorldGenerator
 {
-	private int meta;
-	private int clusterSize;
-	private int bushHeight;
-	private int spawnRadius;
+	private int meta=-1;
+	private int clusterSize=0;
+	private int bushHeight=0;
+	private int spawnRadius=0;
 	private Block underBlock = Blocks.air;
+	final private int[] clusters = {12, 6, 5, 8, 5, 8, 5, 6, 5, 8, 12};
+	final private int[] heights  = { 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1};
+	final private int[] radiuses = { 5, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6};
+
+	//new WorldGenBerryBush().generate(world, rand, i, j, k);
+	public WorldGenBerryBush()
+	{
+	}
 
 	public WorldGenBerryBush(boolean flag, int m, int cluster, int height, int radius)
 	{
@@ -45,6 +53,14 @@ public class WorldGenBerryBush extends WorldGenerator
 		float temp = TFC_Climate.getBioTemperatureHeight(world, i, j, k);
 		float rain = TFC_Climate.getRainfall(world, i, j, k);
 		float evt = TFC_Climate.getCacheManager(world).getEVTLayerAt(i, k).floatdata1;
+		// in case we are called uninitialized, for post worldgen worldgen
+		if (meta == -1) {
+			meta = random.nextInt(11);
+			clusterSize = clusters[meta];
+			bushHeight = heights[meta];
+			spawnRadius = radiuses[meta];
+			if (meta == 10) underBlock = TFCBlocks.peatGrass;
+		}
 
 		FloraIndex index = FloraManager.getInstance().findMatchingIndex(((BlockBerryBush)TFCBlocks.berryBush).getType(meta));
 		if(world.isAirBlock(i, j, k) && j < 250 && temp > index.minBioTemp && temp < index.maxBioTemp && 

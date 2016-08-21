@@ -285,8 +285,8 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 
 	protected void dropSapling(World world, int x, int y, int z, int meta)
 	{
-		if (meta != 9 && meta != 15)
-			dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(0, null, 0), 1, meta));
+		// if (meta != 9 && meta != 15)
+		dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(0, null, 0), 1, meta));
 	}
 
 	@Override
