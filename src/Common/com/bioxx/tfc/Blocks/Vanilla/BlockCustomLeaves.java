@@ -2,6 +2,7 @@ package com.bioxx.tfc.Blocks.Vanilla;
 
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -226,7 +227,7 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	@Override
 	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float f, int i1)
 	{
-		// Do Nothing
+		super.dropBlockAsItemWithChance(world, x, y, z, meta, 1.0f, i1);
 	}
 
 	@Override
@@ -267,6 +268,16 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 						}
 					}
 					return;
+				} else if (name.startsWith("shears")) {
+					entityplayer.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+					entityplayer.addExhaustion(0.045F);
+					dropBlockAsItem(world, i, j, k, world.getBlockMetadata(i, j, k), 0);
+					removeLeaves(world, i, j, k);
+					super.harvestBlock(world, entityplayer, i, j, k, meta);
+
+
+
+					return;
 				}
 			}
 
@@ -279,7 +290,6 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 				dropSapling(world, i, j, k, meta);
 
 			super.harvestBlock(world, entityplayer, i, j, k, meta);
-
 		}
 	}
 
@@ -331,6 +341,16 @@ public class BlockCustomLeaves extends BlockLeaves implements IShearable
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z)
 	{
-		return false;
+		return true;
 	}
+
+    @Override
+    public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune)
+    {
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        ret.add(new ItemStack(this, 1, world.getBlockMetadata(x, y, z)));
+        return ret;
+    }
 }
+
+
