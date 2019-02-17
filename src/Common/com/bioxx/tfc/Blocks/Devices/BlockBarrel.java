@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.Explosion;
@@ -93,6 +95,41 @@ public class BlockBarrel extends BlockTerraContainer
 			return TFC_Textures.invisibleTexture;
 		else
 			return blockIcon;
+	}
+
+	/**
+	 * Adds all intersecting collision boxes to a list. (Be sure to only add boxes to the list if they intersect the
+	 * mask.) Parameters: World, X, Y, Z, mask, list, colliding entity
+	 */
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aaBB, List list, Entity entity)
+	{
+		TEBarrel te = (TEBarrel)world.getTileEntity(x, y, z);
+		boolean sealed = te != null && te.getSealed();
+		float inner = 1f/8f;
+		float outer = 1f/16f;
+
+		if (sealed) {
+			this.setBlockBounds(outer, 0f, outer, 1f-outer, 1, 1f-outer);
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+		} else {
+			// h--g
+			//e--f|
+			//|d |c
+			//a--b
+
+			this.setBlockBounds(outer, 0f, outer, 1f-outer, inner, 1f-outer); // a-c
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+			this.setBlockBounds(outer, 0f, outer, inner, 1f, 1f-outer);   // a-h
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+			this.setBlockBounds(outer, 0f, outer, 1f-outer, 1f, inner);   // a-f
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+			this.setBlockBounds(outer, 0f, 1f-inner, 1f-outer, 1f, 1f-outer);   // d-g
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+			this.setBlockBounds(1f-inner, 0f, outer, 1f-outer, 1f, 1f-outer);   // b-g
+			super.addCollisionBoxesToList(world, x, y, z, aaBB, list, entity);
+			this.setBlockBounds(outer, 0f, outer, 1f-outer, 1, 1f-outer);
+		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
