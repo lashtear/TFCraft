@@ -248,13 +248,15 @@ public class InventoryPlayerTFC extends InventoryPlayer {
 
 	public void copyInventoryTFC(InventoryPlayerTFC par1InventoryPlayer)
 	{
+		return;
+		/*		
 		int i;
 
 		for (i = 0; i < this.extraEquipInventory.length; ++i)
 		{
 			this.extraEquipInventory[i] = ItemStack.copyItemStack(par1InventoryPlayer.extraEquipInventory[i]);
 		}
-		super.copyInventory(par1InventoryPlayer);
+		super.copyInventory(par1InventoryPlayer);*/
 	}
 
 	@Override
