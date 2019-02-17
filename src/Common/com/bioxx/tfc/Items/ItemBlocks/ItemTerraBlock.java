@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -19,7 +19,7 @@ import com.bioxx.tfc.api.Enums.EnumSize;
 import com.bioxx.tfc.api.Enums.EnumWeight;
 import com.bioxx.tfc.api.Interfaces.ISize;
 
-public class ItemTerraBlock extends ItemBlock implements ISize
+public class ItemTerraBlock extends ItemBlockWithMetadata implements ISize
 {
 	public String[] metaNames;
 	public IIcon[] icons;
@@ -27,7 +27,7 @@ public class ItemTerraBlock extends ItemBlock implements ISize
 
 	public ItemTerraBlock(Block b)
 	{
-		super(b);
+		super(b, b);
 		this.setHasSubtypes(true);
 		this.folder = "";
 	}
