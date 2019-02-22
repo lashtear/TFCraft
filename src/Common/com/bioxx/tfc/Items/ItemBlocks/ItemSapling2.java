@@ -14,4 +14,11 @@ public class ItemSapling2 extends ItemSapling
 		System.arraycopy(Global.WOOD_ALL, 16, metaNames, 0, Global.WOOD_ALL.length - 16);
 		this.icons = new IIcon[metaNames.length];
 	}
+
+	@Override
+	public IIcon getIconFromDamage(int index)
+	{
+		return icons[index % icons.length];
+	}
+
 }
