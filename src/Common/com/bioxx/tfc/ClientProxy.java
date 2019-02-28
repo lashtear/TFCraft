@@ -1,16 +1,21 @@
 package com.bioxx.tfc;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelSlime;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -19,6 +24,10 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 import com.bioxx.tfc.Core.ColorizerFoliageTFC;
 import com.bioxx.tfc.Core.TFC_Climate;
@@ -457,6 +466,31 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new FamiliarityHighlightHandler());
 		MinecraftForge.EVENT_BUS.register(new FogHandler());
 
+	}
+
+	// See williewillus/BugFixMod and deNULL/BugPatch
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void playerSleepInBed(PlayerSleepInBedEvent evt) {
+
+		// S0APacketUseBed sends Y as a byte and reads it back in signed.
+		if (evt.y <= 0) {
+			int actualY = (evt.y + 256) % 256;
+			evt.result = EntityPlayer.EnumStatus.OTHER_PROBLEM;
+
+			Method m = ReflectionHelper
+				.findMethod(EntityPlayer.class,
+							evt.entityPlayer,
+							new String[] {"sleepInBedAt",
+										  "func_71018_a"},
+							int.class, int.class, int.class);
+			if (m != null) {
+				try {
+					m.invoke(evt.entityPlayer, evt.x, actualY, evt.z);
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 
 	@Override
